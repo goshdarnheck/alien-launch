@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Rocket : MonoBehaviour {
 
-    [SerializeField] float rcsThrust = 250f;
-    [SerializeField] float mainThrust = 250f;
+    [SerializeField] float rcsThrust = 100f;
+    [SerializeField] float mainThrust = 100f;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -23,13 +23,27 @@ public class Rocket : MonoBehaviour {
         Rotate();
 	}
 
+    void OnCollisionEnter(Collision collision) {
+        switch (collision.gameObject.tag) {
+            case "Fuel":
+                print("You got some fuel");
+                break;
+            case "Friendly":
+                // do nothing
+                print("OK");
+                break;
+            default:
+                print("dead");
+                // kill player or whatever
+                break;
+        }
+    }
+
     private void Thrust() {
         rigidBody.freezeRotation = true;
 
-        float rotationThisFrame = mainThrust * Time.deltaTime;
-
         if (Input.GetKey(KeyCode.W)) {
-            rigidBody.AddRelativeForce(Vector3.up * rotationThisFrame);
+            rigidBody.AddRelativeForce(Vector3.up * mainThrust);
 
             if (!audioSource.isPlaying) {
                 audioSource.Play();

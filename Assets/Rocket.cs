@@ -24,6 +24,7 @@ public class Rocket : MonoBehaviour {
 
     enum State { Alive, Dying, Transcending };
     State state = State.Alive;
+    bool collisionsDisabled = false;
 
     void Start() {
         rigidBody = GetComponent<Rigidbody>();
@@ -35,10 +36,14 @@ public class Rocket : MonoBehaviour {
             RespondToTrustInput();
             RepsondToRotationInput();
         }
+
+        if (Debug.isDebugBuild) {
+            RespondToDebugKeys();
+        }
     }
 
     void OnCollisionEnter (Collision collision) {
-        if (state != State.Alive) { return; } // No extra collision stuff when not alive
+        if (state != State.Alive || collisionsDisabled) { return; } // No extra collision stuff when not alive
 
         switch (collision.gameObject.tag) {
             case "Friendly":
@@ -91,7 +96,14 @@ public class Rocket : MonoBehaviour {
     }
 
     private void LoadNextLevel() {
-        SceneManager.LoadScene(1);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+
+        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings) {
+           nextSceneIndex = 0;
+        }
+
+        SceneManager.LoadScene(nextSceneIndex);
         StartAliveSequence();
     }
 
@@ -131,6 +143,14 @@ public class Rocket : MonoBehaviour {
         }
 
         rigidBody.freezeRotation = false;
+    }
+
+    private void RespondToDebugKeys() {
+        if (Input.GetKeyDown(KeyCode.L)) {
+            LoadNextLevel();
+        } else if (Input.GetKeyDown(KeyCode.C)) {
+            collisionsDisabled = !collisionsDisabled;
+        }
     }
 }
 

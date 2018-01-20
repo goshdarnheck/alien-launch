@@ -987,8 +987,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7ef2dc28acbb049ad91725e43372bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rcsThrust: 250
-  mainThrust: 50
+  rcsThrust: 500
+  mainThrust: 100
   mainEngine: {fileID: 8300000, guid: de1f16ff5310c5849ae08a553ca99dfe, type: 3}
   success: {fileID: 8300000, guid: 2a62b4b6daac0024090c0f0346580009, type: 3}
   death: {fileID: 8300000, guid: 879d5324d095370478427d36bee6ce34, type: 3}

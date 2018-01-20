@@ -24,14 +24,12 @@ public class Rocket : MonoBehaviour {
     enum State { Alive, Dying, Transcending };
     State state = State.Alive;
 
-    // Use this for initialization
-    void Start () {
+    void Start() {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update () {
+    void Update() {
         if (state == State.Alive) {
             RespondToTrustInput();
             RepsondToRotationInput();

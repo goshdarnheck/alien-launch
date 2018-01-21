@@ -92,7 +92,13 @@ public class Rocket : MonoBehaviour {
 
         deathParticles.Play();
 
-        Invoke("LoadFirstLevel", levelLoadDelay);
+        Invoke("LoadSameLevel", levelLoadDelay);
+    }
+
+    private void LoadSameLevel() {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
+        StartAliveSequence();
     }
 
     private void LoadNextLevel() {
@@ -116,8 +122,7 @@ public class Rocket : MonoBehaviour {
         if (Input.GetKey(KeyCode.W)) {
             ApplyThrust();
         } else {
-            audioSource.Stop();
-            mainEngineParticles.Stop();
+            StopApplyingThrust();
         }
     }
 
@@ -131,8 +136,13 @@ public class Rocket : MonoBehaviour {
         mainEngineParticles.Play();
     }
 
+    private void StopApplyingThrust() {
+        audioSource.Stop();
+        mainEngineParticles.Stop();
+    }
+
     private void RepsondToRotationInput() {
-        rigidBody.freezeRotation = true;
+        rigidBody.angularVelocity = Vector3.zero; // remove rotation due to physics
 
         float rotationThisFrame = rcsThrust * Time.deltaTime;
 
@@ -141,8 +151,6 @@ public class Rocket : MonoBehaviour {
         } else if (Input.GetKey(KeyCode.D)) {
             transform.Rotate(-Vector3.forward * rotationThisFrame);
         }
-
-        rigidBody.freezeRotation = false;
     }
 
     private void RespondToDebugKeys() {
